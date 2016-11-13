@@ -144,7 +144,7 @@ function createSnipped (n) {
 
 /**
  * @typedef {Object} SplitOptions
- * @param {RegEx} re Internally set.
+ * @param {RegExp} re Internally set.
  * @param {string} value
  * @param {string} target
  */
