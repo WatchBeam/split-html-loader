@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "escape-string-regexp": "^1.0.5",
-    "parse5": "^2.2.3"
+    "parse5": "^2.2.3",
+    "loader-utils": "^0.2.16"
   }
 }

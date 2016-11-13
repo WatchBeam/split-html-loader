@@ -10,7 +10,7 @@ module.exports = {
   },
   module: {
     preLoaders: [
-      { test: /\.html$/, loader: 'split-html?target=platform&value=xbox' },
+      { test: /\.html$/, loader: 'split-html?platform=xbox' },
     ],
     loaders: [
       { test: /\.html$/, loader: 'html' },

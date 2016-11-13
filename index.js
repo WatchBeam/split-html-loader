@@ -4,8 +4,8 @@ const assert = require('assert');
 const parse5 = require('parse5');
 const path = require('path');
 const esr = require('escape-string-regexp');
-const qs = require('querystring');
 const fs = require('fs');
+const loaderUtils = require('loader-utils');
 
 /**
  * ParseError is thrown when a parsing error happens from the loader.
@@ -62,8 +62,9 @@ function match(child, re) {
 
   return {
     directive: result[1] ? result[1].trim() : 'if',
-    negated: !!result[2],
-    name: result[3],
+    target: result[2],
+    negated: !!result[3],
+    value: result[4]
   };
 }
 
@@ -79,8 +80,9 @@ function findEndIndex(startIndex, startMatch, childNodes, re) {
     }
 
     if (data.directive === 'end'
+        && data.target === startMatch.target
         && data.negated === startMatch.negated
-        && data.name === startMatch.name) {
+        && data.value === startMatch.value) {
       return i;
     }
   }
@@ -128,8 +130,9 @@ function strip(ast, options) {
       continue;
     }
 
-    const matches = (data.name === options.value && !data.negated)
-        || (data.name !== options.value && data.negated);
+    const value = options.targets[data.target];
+    const matches = (data.value === value && !data.negated)
+        || (data.value !== value && data.negated);
 
     switch (data.directive) {
     case 'start':
@@ -182,7 +185,11 @@ function strip(ast, options) {
 
 function run(html, options) {
   const ast = parse5.parseFragment(html, { locationInfo: true });
-  const re = new RegExp(`^\\W*(.*?\\W)?${esr(options.target)}:\\W*(not-)?(.*?)\\W*$`);
+  const targets = Object
+    .keys(options.targets)
+    .map(target => esr(target))
+    .join('|');
+  const re = new RegExp(`^\\W*(.*?\\W)?(${targets}):\\W*(not-)?(.*?)\\W*$`);
   assert(ast.nodeName === '#document-fragment', 'Expected to have parsed a document fragment');
   strip(ast, Object.assign({ re }, options));
 
@@ -192,7 +199,7 @@ function run(html, options) {
 function loader (source) {
   let options;
   try {
-    options = qs.parse(this.query.slice(1));
+    options = loaderUtils.parseQuery(this.query);
   } catch (err) {
     throw new Error(
       'Split-css-loader is unable to parse the provided query string. ' +
