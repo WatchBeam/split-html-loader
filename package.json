@@ -4,7 +4,7 @@
   "description": "Conditionally compiles HTML for multiple platforms",
   "main": "index.js",
   "scripts": {
-    "test": "mocha",
+    "test": "npm run lint && mocha",
     "start": "webpack-dev-server --config demo/webpack.config.js --content-base demo",
     "lint": "eslint index.js test.js demo"
   },
