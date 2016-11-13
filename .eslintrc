@@ -1,0 +1,41 @@
+{
+    "extends": "airbnb",
+    "parserOptions": {
+        "sourceType": "script"
+    },
+    "rules": {
+        "indent": [2, 2],
+        "func-names": 0,
+        "no-param-reassign": 0,
+        "space-before-function-paren": [2, "always"],
+        "arrow-body-style": 0,
+        "prefer-rest-params": 0,
+        "consistent-return": 0,
+        "constructor-super": 2,
+        "no-confusing-arrow": 0,
+        "valid-jsdoc": [2, {
+            "requireParamDescription": false,
+            "requireReturn": false,
+            "requireReturnDescription": false
+        }],
+        "require-jsdoc": [2, {
+            "require": {
+            "FunctionDeclaration": true,
+                "MethodDefinition": true,
+                "ClassDeclaration": true
+            }
+        }],
+        "strict": [2, "global"],
+        "no-underscore-dangle": 0,
+        "newline-per-chained-call": ["error", { "ignoreChainWithDepth": 5 }],
+
+        "import/no-extraneous-dependencies": ["error", {
+            "devDependencies": true,
+            "optionalDependencies": false,
+            "peerDependencies": false
+        }],
+        "no-continue": 0,
+        "no-plusplus": 0,
+        "comma-dangle": ["error", "always-multiline"]
+    },
+}
