@@ -1,6 +1,6 @@
 {
   "name": "split-html-loader",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Conditionally compiles HTML for multiple platforms",
   "main": "index.js",
   "scripts": {
