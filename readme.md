@@ -47,7 +47,13 @@ module.exports = {
   // ...
   module: {
     preLoaders: [
-      { test: /\.html$/, loader: 'split-html?platform=mobile' },
+      {
+        test: /\.html$/,
+        loader: 'split-html',
+        query: {
+          targets: { platform: 'mobile' }
+        }
+      },
     ],
     loaders: [
       { test: /\.html$/, loader: 'html' },
@@ -56,7 +62,7 @@ module.exports = {
 };
 ```
 
-The loader can take any number of parameters, with each key representing what you want to compile against, and each value representing what you want that key to be. In this case, we specified that we only want to compile `<!-- platform: mobile -->` and want everything else to be stripped out.
+The loader can take any number of key/value pairs in `targets`, with each key representing what you want to compile against, and each value representing what you want that key to be. In this case, we specified that we only want to compile `<!-- platform: mobile -->` and want everything else to be stripped out.
 
 ### Programmatic API
 
@@ -66,6 +72,6 @@ You can also use this module natively, in Node. The options are the same, you si
 const split = require('split-html-loader');
 
 fs.writeFileSync('./index.html', split.string(myHTML, {
-  'platform': 'mobile'
+  targets: { platform: 'mobile' }
 }));
 ```

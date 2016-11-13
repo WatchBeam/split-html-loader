@@ -130,7 +130,7 @@ function strip(ast, options) {
       continue;
     }
 
-    const value = options[data.target];
+    const value = options.targets[data.target];
     const matches = (data.value === value && !data.negated)
         || (data.value !== value && data.negated);
 
@@ -186,9 +186,9 @@ function strip(ast, options) {
 function run(html, options) {
   const ast = parse5.parseFragment(html, { locationInfo: true });
   const targets = Object
-    .keys(options)
+    .keys(options.targets)
     .map(target => esr(target))
-    .join('|')
+    .join('|');
   const re = new RegExp(`^\\W*(.*?\\W)?(${targets}):\\W*(not-)?(.*?)\\W*$`);
   assert(ast.nodeName === '#document-fragment', 'Expected to have parsed a document fragment');
   strip(ast, Object.assign({ re }, options));

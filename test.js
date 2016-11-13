@@ -18,44 +18,58 @@ describe('split-html-loader', () => {
   };
 
   it('runs simple conditionals', () => {
-    assertOutputs('simple', { 'platform': 'xbox' });
+    assertOutputs('simple', {
+      targets: { platform: 'xbox' }
+    });
   });
 
   it('runs block conditionals', () => {
-    assertOutputs('block', { 'platform': 'xbox' });
+    assertOutputs('block', {
+      targets: { platform: 'xbox' }
+    });
   });
 
   it('runs multiple targets', () => {
     assertOutputs('multiple-targets', {
-      'platform': 'xbox',
-      'locale': 'en'
+      targets: {
+        platform: 'xbox',
+        locale: 'en'
+      }
     });
   });
 
   it('errors if a block doesn\'t end', () => {
     assertThrows(
-      'block-unended', { 'platform': 'xbox' },
+      'block-unended', {
+        targets: { platform: 'xbox' }
+      },
       'INPUT:1  Cannot find END of directive block (split-html-loader)'
     );
   });
 
   it('errors if a block has an unmatched start', () => {
     assertThrows(
-      'block-unstarted', { 'platform': 'xbox' },
+      'block-unstarted', {
+        targets: { platform: 'xbox' }
+      },
       'INPUT:1  Found an END directive block without a start (split-html-loader)'
     );
   });
 
   it('errors if a conditional is missing a subsequent block', () => {
     assertThrows(
-      'if-dangling', { 'platform': 'xbox' },
+      'if-dangling', {
+        targets: { platform: 'xbox' }
+      },
       'INPUT:1  Dangling split block, expected another node after this line! (split-html-loader)'
     );
   });
 
   it('attaches filenames to errors', () => {
     try {
-      string('<!-- a: b -->', { 'a': 'b' });
+      string('<!-- a: b -->', {
+        targets: { a: 'b' }
+      });
     } catch (e) {
       e.setFilename(path.join(__dirname, 'foo/bar.html'));
       expect(e.message).to.equal('./foo/bar.html:1: Dangling split block, expected '
