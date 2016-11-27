@@ -8,32 +8,12 @@ const fs = require('fs');
 const loaderUtils = require('loader-utils');
 
 /**
- * ParseError is thrown when a parsing error happens from the loader.
- */
-class ParseError extends Error {
-  constructor(message, node) {
-    super(`INPUT:${node.__location.line}  ${message} (split-html-loader)`);
-    this.originalMessage = message;
-    this.name = 'ParseError';
-    this.node = node;
-  }
-
-  /**
-   * Updates the error message to include the filename, relative to the
-   * package path.
-   */
-  setFilename(filename) {
-    const file = './' + path.relative(findPkgRoot(__dirname), filename);
-    this.message = `${file}:${this.node.__location.line}: `
-        + `${this.originalMessage} (split-html-loader)\n`;
-  }
-}
-
-/**
  * Attempts to find the root path of the local package installation, defaulting
  * to the filesystem root.
+ * @param {string} dir
+ * @return {string}
  */
-function findPkgRoot(dir) {
+function findPkgRoot (dir) {
   if (dir === '/') {
     return dir;
   }
@@ -47,10 +27,52 @@ function findPkgRoot(dir) {
 }
 
 /**
+ * @external ASTNode
+ * @see {@link https://github.com/inikulin/parse5/wiki/Documentation|parse5}
+ */
+
+/**
+ * ParseError is thrown when a parsing error happens from the loader.
+ */
+class ParseError extends Error {
+  /**
+   * @param  {string} message
+   * @param  {ASTNode} node
+   */
+  constructor (message, node) {
+    super(`INPUT:${node.__location.line}  ${message} (split-html-loader)`);
+    this.originalMessage = message;
+    this.name = 'ParseError';
+    this.node = node;
+  }
+
+  /**
+   * Updates the error message to include the filename, relative to the
+   * package path.
+   * @param {string} filename
+   */
+  setFilename (filename) {
+    const file = `./${path.relative(findPkgRoot(__dirname), filename)}`;
+    this.message = `${file}:${this.node.__location.line}: `
+        + `${this.originalMessage} (split-html-loader)\n`;
+  }
+}
+
+/**
+ * @typedef {Object} MatchResult
+ * @property {string} directive
+ * @property {boolean} negated
+ * @property {string} name
+ */
+
+/**
  * If the child node is a comment element, match attempts to parse it
  * out into split-html pieces.
+ * @param {ASTNode} child
+ * @param {RegExp} re
+ * @return {MatchResult}
  */
-function match(child, re) {
+function match (child, re) {
   if (child.nodeName !== '#comment') {
     return;
   }
@@ -71,8 +93,13 @@ function match(child, re) {
 /**
  * Returns the index of the END directive in the childNodes corresponding
  * to the startMatch, starting from the startIndex.
+ * @param {number} startIndex
+ * @param {MatchResult} startMatch
+ * @param {ASTNode[]} childNodes
+ * @param {RegExp} re
+ * @return {number}
  */
-function findEndIndex(startIndex, startMatch, childNodes, re) {
+function findEndIndex (startIndex, startMatch, childNodes, re) {
   for (let i = startIndex; i < childNodes.length; i++) {
     const data = match(childNodes[i], re);
     if (!data) {
@@ -92,8 +119,11 @@ function findEndIndex(startIndex, startMatch, childNodes, re) {
 
 /**
  * Returns the index of the next concrete note after the startIndex.
+ * @param {number} startIndex
+ * @param {ASTNode[]} childNodes
+ * @return {number}
  */
-function findConcreteIndex(startIndex, childNodes) {
+function findConcreteIndex (startIndex, childNodes) {
   for (let i = startIndex; i < childNodes.length; i++) {
     if (childNodes[i].nodeName[0] !== '#') {
       return i;
@@ -105,19 +135,30 @@ function findConcreteIndex(startIndex, childNodes) {
 
 /**
  * Creates a comment saying the `n` nodes were snipped.
+ * @param {number} n
+ * @return {ASTNode.<CommentNode>}
  */
-function createSnipped(n) {
+function createSnipped (n) {
   return parse5.treeAdapters.default.createCommentNode(
     ` ${n} ${n > 1 ? 'nodes' : 'node'} snipped by split-html `
   );
 }
 
 /**
- * Strip runs the splitting on an HTML AST created by parse5.
+ * @typedef {Object} SplitOptions
+ * @param {RegExp} re Internally set.
+ * @param {string} value
+ * @param {string} target
  */
-function strip(ast, options) {
+
+/**
+ * Strip runs the splitting on an HTML AST created by parse5.
+ * @param {ASTNode.<document>} ast
+ * @param {SplitOptions} options
+ */
+function strip (ast, options) {
   if (!ast.childNodes) {
-      return;
+    return;
   }
 
   let children = ast.childNodes;
@@ -151,7 +192,6 @@ function strip(ast, options) {
           .concat(children.slice(end));
       }
       break;
-
     case 'if':
       // For "IF"s, just look for and remove the next *concrete*
       // element if it doesn't match.
@@ -166,7 +206,6 @@ function strip(ast, options) {
           .concat(children.slice(toRemove + 1));
       }
       break;
-
     case 'end':
       // If we got an END block and we didn't have a matching START block, error!
       if (ends.indexOf(child) === -1) {
@@ -183,7 +222,13 @@ function strip(ast, options) {
   }
 }
 
-function run(html, options) {
+/**
+ * Performs html splitting on a string.
+ * @param  {string} html
+ * @param  {SplitOptions} options
+ * @return {string}
+ */
+function run (html, options) {
   const ast = parse5.parseFragment(html, { locationInfo: true });
   const targets = Object
     .keys(options.targets)
@@ -196,6 +241,11 @@ function run(html, options) {
   return parse5.serialize(ast);
 }
 
+/**
+ * Called from webpack.
+ * @param  {string} source
+ * @return {string}
+ */
 function loader (source) {
   let options;
   try {

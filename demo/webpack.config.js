@@ -1,3 +1,5 @@
+'use strict';
+
 const path = require('path');
 
 module.exports = {
@@ -6,7 +8,7 @@ module.exports = {
   },
   entry: './demo/main.js',
   output: {
-    filename: 'bundle.js'
+    filename: 'bundle.js',
   },
   module: {
     preLoaders: [
@@ -14,6 +16,6 @@ module.exports = {
     ],
     loaders: [
       { test: /\.html$/, loader: 'html' },
-    ]
-  }
+    ],
+  },
 };
