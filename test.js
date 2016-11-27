@@ -5,7 +5,6 @@ const path = require('path');
 const string = require('./').string;
 const fs = require('fs');
 
-/* eslint-env node, mocha */
 
 describe('split-html-loader', () => {
   const assertOutputs = (name, params) => {

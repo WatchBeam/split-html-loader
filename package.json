@@ -4,9 +4,8 @@
   "description": "Conditionally compiles HTML for multiple platforms",
   "main": "index.js",
   "scripts": {
-    "test": "npm run lint && mocha",
-    "start": "webpack-dev-server --config demo/webpack.config.js --content-base demo",
-    "lint": "eslint index.js test.js demo"
+    "test": "mocha",
+    "start": "webpack-dev-server --config demo/webpack.config.js --content-base demo"
   },
   "repository": {
     "type": "git",
@@ -27,11 +26,6 @@
   "homepage": "https://github.com/WatchBeam/split-html-loader#readme",
   "devDependencies": {
     "chai": "^3.5.0",
-    "eslint": "^3.10.0",
-    "eslint-config-airbnb": "^13.0.0",
-    "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-jsx-a11y": "^2.2.3",
-    "eslint-plugin-react": "^6.6.0",
     "html-loader": "^0.4.4",
     "mocha": "^3.1.2",
     "webpack": "^1.13.3",

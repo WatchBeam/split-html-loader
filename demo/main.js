@@ -1,3 +1,3 @@
 'use strict';
 
-console.log(require('./index.html')); // eslint-disable-line no-console
+console.log(require('./index.html'));
