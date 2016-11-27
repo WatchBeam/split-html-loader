@@ -173,7 +173,7 @@ function strip (ast, options) {
         || (data.name !== options.value && data.negated);
 
     switch (data.directive) {
-    case 'start': {
+    case 'start':
       // On a START directive, look for the matching END block. Remove
       // everything including the START and END blocks if it doesn't match.
       const end = findEndIndex(i + 1, data, children, options.re);
@@ -189,7 +189,6 @@ function strip (ast, options) {
           .concat(children.slice(end));
       }
       break;
-    }
     case 'if':
       // For "IF"s, just look for and remove the next *concrete*
       // element if it doesn't match.
