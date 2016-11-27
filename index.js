@@ -190,7 +190,7 @@ function strip (ast, options) {
       }
       break;
     }
-    case 'if': {
+    case 'if':
       // For "IF"s, just look for and remove the next *concrete*
       // element if it doesn't match.
       const toRemove = findConcreteIndex(i + 1, children);
@@ -204,7 +204,6 @@ function strip (ast, options) {
           .concat(children.slice(toRemove + 1));
       }
       break;
-    }
     case 'end':
       // If we got an END block and we didn't have a matching START block, error!
       if (ends.indexOf(child) === -1) {
