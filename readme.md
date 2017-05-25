@@ -1,6 +1,6 @@
-# split-html-loader [![Build Status](https://travis-ci.org/WatchBeam/split-html-loader.svg?branch=master)](https://travis-ci.org/WatchBeam/split-html-loader)
+# split-html-loader [![Build Status](https://travis-ci.org/mixer/split-html-loader.svg?branch=master)](https://travis-ci.org/mixer/split-html-loader)
 
-`split-html-loader` is a webpack loader that allows conditional compilation of HTML via comment 'directives'. It's essentially a very minimalistic templating language designed specifically to 'feel' like natural HTML and to interoperate fully with other templating engines and build tools. It goes along with our [split-css-loader](https://github.com/WatchBeam/split-css-loader).
+`split-html-loader` is a webpack loader that allows conditional compilation of HTML via comment 'directives'. It's essentially a very minimalistic templating language designed specifically to 'feel' like natural HTML and to interoperate fully with other templating engines and build tools. It goes along with our [split-css-loader](https://github.com/mixer/split-css-loader).
 
 For example, you can have split styling for a "desktop" and "xbox" build:
 

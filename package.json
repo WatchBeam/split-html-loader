@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/WatchBeam/split-html-loader.git"
+    "url": "git+https://github.com/mixer/split-html-loader.git"
   },
   "keywords": [
     "webpack",
@@ -21,9 +21,9 @@
   "author": "Connor Peet <connor@peet.io>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/WatchBeam/split-html-loader/issues"
+    "url": "https://github.com/mixer/split-html-loader/issues"
   },
-  "homepage": "https://github.com/WatchBeam/split-html-loader#readme",
+  "homepage": "https://github.com/mixer/split-html-loader#readme",
   "devDependencies": {
     "chai": "^3.5.0",
     "html-loader": "^0.4.4",
